@@ -20,12 +20,12 @@ class ImagekitServiceProvider extends PackageServiceProvider
 
     public function booting(Closure $callback)
     {
-        if (!config('imagekit.extend_storage')) {
+        if (! config('imagekit.extend_storage')) {
             return;
         }
 
         Storage::extend('imagekit', function () {
-            $client = new ImageKit (
+            $client = new ImageKit(
                 config('imagekit.public'),
                 config('imagekit.private'),
                 config('imagekit.endpoint')
