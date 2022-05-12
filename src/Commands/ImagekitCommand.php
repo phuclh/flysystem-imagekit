@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Phuclh\Imagekit\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class ImagekitCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'flysystem-imagekit';
 
     public $description = 'My command';
 

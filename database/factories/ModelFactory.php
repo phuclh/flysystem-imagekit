@@ -1,6 +1,6 @@
 <?php
 
-namespace VendorName\Skeleton\Database\Factories;
+namespace Phuclh\Imagekit\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
