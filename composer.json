@@ -17,8 +17,9 @@
     ],
     "require": {
         "php": "^8.1",
-        "spatie/laravel-package-tools": "^1.9.2",
-        "illuminate/contracts": "^9.0"
+        "illuminate/contracts": "^9.0",
+        "imagekit/imagekit": "^2.0",
+        "spatie/laravel-package-tools": "^1.9.2"
     },
     "require-dev": {
         "nunomaduro/collision": "^6.0",
@@ -34,8 +35,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Phuclh\\Imagekit\\": "src",
-            "Phuclh\\Imagekit\\Database\\Factories\\": "database/factories"
+            "Phuclh\\Imagekit\\": "src"
         }
     },
     "autoload-dev": {
@@ -55,10 +55,7 @@
         "laravel": {
             "providers": [
                 "Phuclh\\Imagekit\\ImagekitServiceProvider"
-            ],
-            "aliases": {
-                "Imagekit": "Phuclh\\Imagekit\\Facades\\Imagekit"
-            }
+            ]
         }
     },
     "minimum-stability": "dev",
