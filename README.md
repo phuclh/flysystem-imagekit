@@ -5,6 +5,8 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/phuclh/flysystem-imagekit/Check%20&%20fix%20styling?label=code%20style)](https://github.com/phuclh/flysystem-imagekit/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/phuclh/flysystem-imagekit.svg?style=flat-square)](https://packagist.org/packages/phuclh/flysystem-imagekit)
 
+This package is an upgraded version of [TaffoVelikoff/imagekit-adapter](https://github.com/TaffoVelikoff/imagekit-adapter) that supports Laravel 9 and Flysystem 3.
+
 ## Installation
 
 You can install the package via composer:
@@ -19,11 +21,64 @@ You can publish the config file with:
 php artisan vendor:publish --tag="flysystem-imagekit-config"
 ```
 
+## Setup
+
+First you will need to sing up for an [ImageKit](https://imagekit.io/) account. Then go [https://imagekit.io/dashboard#developers](https://imagekit.io/dashboard#developers) to get your public key, private key and url endpoint. Add the following to your .env file:
+
+```bash
+IMAGEKIT_PUBLIC=your_public_key
+IMAGEKIT_PRIVATE=your_public_key
+IMAGEKIT_ENDPOINT=https://ik.imagekit.io/your_id
+```
+
 ## Usage
 
+Go to `config/filesystems.php` and create a new disk (or change the driver of one to 'imagekit'):
+
 ```php
-$imagekit = new Phuclh\Imagekit();
-echo $imagekit->echoPhrase('Hello, Phuclh!');
+'disks' => [
+    ...
+    'imagekit' => [
+        'driver'    => 'imagekit',
+    ]
+],
+```
+
+```php
+// Upload file (second argument can be an url, file or base64)
+Storage::disk('imagekit')->put('filename.jpg', 'https://mysite.com/my_image.com');
+
+// Get file
+Storage::disk('imagekit')->get('filename.jpg');
+
+// Delete file
+Storage::disk('imagekit')->delete('filename.jpg');
+
+// List all files 
+Storage::disk('imagekit')->listContents('', false); // listContents($path, $deep)
+```
+
+Or if you don't want to extend the storage you can also do this:
+
+```php
+use ImageKit\ImageKit;
+use TaffoVelikoff\ImageKitAdapter\ImageKitAdapter;
+
+// Client
+$client = new ImageKit (
+    config('imagekit.public'),
+    config('imagekit.private'),
+    config('imagekit.endpoint')
+);
+
+// Adapter
+$adapter = new ImagekitAdapter($client);
+
+// Filesystem
+$fsys = new Filesystem($adapter);
+
+// Read a file example
+$file = $fsys->read('default-image.jpg');
 ```
 
 ## Testing
