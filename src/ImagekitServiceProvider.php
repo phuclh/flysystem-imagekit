@@ -2,7 +2,6 @@
 
 namespace Phuclh\Imagekit;
 
-use Closure;
 use Illuminate\Support\Facades\Storage;
 use ImageKit\ImageKit;
 use League\Flysystem\Filesystem;
