@@ -33,17 +33,6 @@ IMAGEKIT_ENDPOINT=https://ik.imagekit.io/your_id
 
 ## Usage
 
-Go to `config/filesystems.php` and create a new disk (or change the driver of one to 'imagekit'):
-
-```php
-'disks' => [
-    ...
-    'imagekit' => [
-        'driver'    => 'imagekit',
-    ]
-],
-```
-
 ```php
 // Upload file (second argument can be an url, file or base64)
 Storage::disk('imagekit')->put('filename.jpg', 'https://mysite.com/my_image.com');

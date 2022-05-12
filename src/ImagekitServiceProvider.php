@@ -20,6 +20,8 @@ class ImagekitServiceProvider extends PackageServiceProvider
 
     public function bootingPackage()
     {
+        $this->app['config']['filesystems.disks.imagekit'] = ['driver' => 'imagekit'];
+
         Storage::extend('imagekit', function ($app, $config) {
             $client = new ImageKit(
                 config('imagekit.public'),

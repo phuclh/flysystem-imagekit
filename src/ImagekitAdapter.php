@@ -3,10 +3,13 @@
 namespace Phuclh\Imagekit;
 
 use DateTime;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use ImageKit\ImageKit;
 use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\UnableToDeleteDirectory;
+use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
@@ -47,7 +50,7 @@ class ImagekitAdapter implements FilesystemAdapter
             'includeFolder' => true,
         ]);
 
-        return count($file->success ?? []) !== 0;
+        return !empty($file->success);
     }
 
     public function directoryExists(string $path): bool
@@ -82,12 +85,27 @@ class ImagekitAdapter implements FilesystemAdapter
             'includeFolder' => true,
         ]);
 
-        return $file->success[0];
+        if (empty($file->success)) {
+            throw UnableToReadFile::fromLocation($path, 'File not found.');
+        }
+
+        return file_get_contents($file->success[0]->url);
     }
 
     public function readStream(string $path)
     {
-        return $this->read($path);
+        $filePath = $this->getFileFolderName($path);
+
+        $file = $this->client->listFiles([
+            'name' => $filePath['fileName'],
+            'includeFolder' => true,
+        ]);
+
+        if (empty($file->success)) {
+            throw UnableToReadFile::fromLocation($path, 'File not found.');
+        }
+
+        return fopen($file->success[0]->url, 'rb');
     }
 
     public function delete(string $path): void
@@ -108,6 +126,10 @@ class ImagekitAdapter implements FilesystemAdapter
             'name' => $path,
             'includeFolder' => true,
         ]);
+
+        if (empty($folder->success)) {
+            throw UnableToDeleteDirectory::atLocation($path, 'Directory not found.');
+        }
 
         $this->client->deleteFile($folder->success[0]->folderId);
     }
@@ -185,7 +207,7 @@ class ImagekitAdapter implements FilesystemAdapter
         ]);
 
         // If not recursive remove files
-        if (! $deep) {
+        if (!$deep) {
             foreach ($list->success as $key => $e) {
                 $pathParts = isset($e->filePath)
                     ? explode('/', $e->filePath)
@@ -236,7 +258,7 @@ class ImagekitAdapter implements FilesystemAdapter
         $this->upload($destination, $oldFileUrl);
     }
 
-    public function getMetadata($path): array
+    protected function getMetadata($path): array
     {
         $file = $this->searchFile($path);
 
@@ -292,12 +314,16 @@ class ImagekitAdapter implements FilesystemAdapter
             'path' => $filePath['directory'],
         ]);
 
+        if (empty($file->success)) {
+            throw new FileNotFoundException('File not found: ' . $path);
+        }
+
         return $file->success[0];
     }
 
     protected function upload(string $path, $contents): void
     {
-        if (! ($file = $this->getFileFolderName($path))) {
+        if (!($file = $this->getFileFolderName($path))) {
             return;
         }
 
