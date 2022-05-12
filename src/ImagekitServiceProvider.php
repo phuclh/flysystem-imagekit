@@ -2,7 +2,7 @@
 
 namespace Phuclh\Imagekit;
 
-use Closure;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
 use ImageKit\ImageKit;
 use League\Flysystem\Filesystem;
@@ -20,11 +20,11 @@ class ImagekitServiceProvider extends PackageServiceProvider
 
     public function bootingPackage()
     {
-        if (! config('imagekit.extend_storage')) {
+        if (!config('imagekit.extend_storage')) {
             return;
         }
 
-        Storage::extend('imagekit', function () {
+        Storage::extend('imagekit', function ($app, $config) {
             $client = new ImageKit(
                 config('imagekit.public'),
                 config('imagekit.private'),
@@ -33,7 +33,11 @@ class ImagekitServiceProvider extends PackageServiceProvider
 
             $adapter = new ImagekitAdapter($client);
 
-            return new Filesystem($adapter);
+            return new FilesystemAdapter(
+                new Filesystem($adapter, $config),
+                $adapter,
+                $config
+            );
         });
     }
 }
