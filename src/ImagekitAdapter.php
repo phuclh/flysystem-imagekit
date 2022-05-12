@@ -50,7 +50,7 @@ class ImagekitAdapter implements FilesystemAdapter
             'includeFolder' => true,
         ]);
 
-        return !empty($file->success);
+        return ! empty($file->success);
     }
 
     public function directoryExists(string $path): bool
@@ -207,7 +207,7 @@ class ImagekitAdapter implements FilesystemAdapter
         ]);
 
         // If not recursive remove files
-        if (!$deep) {
+        if (! $deep) {
             foreach ($list->success as $key => $e) {
                 $pathParts = isset($e->filePath)
                     ? explode('/', $e->filePath)
@@ -323,7 +323,7 @@ class ImagekitAdapter implements FilesystemAdapter
 
     protected function upload(string $path, $contents): void
     {
-        if (!($file = $this->getFileFolderName($path))) {
+        if (! ($file = $this->getFileFolderName($path))) {
             return;
         }
 
