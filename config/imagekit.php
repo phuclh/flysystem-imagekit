@@ -38,16 +38,4 @@ return [
     */
 
     'include_folders' => true,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Extend storage
-    |--------------------------------------------------------------------------
-    |
-    | extend_storage - if set to true will extend the file storage system, so you can define new disks
-    | using "imagekit" driver in the filesystems.php config file.
-    |
-    */
-
-    'extend_storage' => true,
 ];

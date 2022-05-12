@@ -1,4 +1,4 @@
-# A flysystem driver for Imagekit
+# A Laravel flysystem driver for Imagekit
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/phuclh/flysystem-imagekit.svg?style=flat-square)](https://packagist.org/packages/phuclh/flysystem-imagekit)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/phuclh/flysystem-imagekit/run-tests?label=tests)](https://github.com/phuclh/flysystem-imagekit/actions?query=workflow%3Arun-tests+branch%3Amain)
@@ -57,31 +57,6 @@ Storage::disk('imagekit')->delete('filename.jpg');
 // List all files 
 Storage::disk('imagekit')->listContents('', false); // listContents($path, $deep)
 ```
-
-Or if you don't want to extend the storage you can also do this:
-
-```php
-use ImageKit\ImageKit;
-use TaffoVelikoff\ImageKitAdapter\ImageKitAdapter;
-
-// Client
-$client = new ImageKit (
-    config('imagekit.public'),
-    config('imagekit.private'),
-    config('imagekit.endpoint')
-);
-
-// Adapter
-$adapter = new ImagekitAdapter($client);
-
-// Filesystem
-$fsys = new Filesystem($adapter);
-
-// Read a file example
-$file = $fsys->read('default-image.jpg');
-```
-
-and then set `extend_storage` in `config/imagekit.php` to `false`.
 
 ## Testing
 
