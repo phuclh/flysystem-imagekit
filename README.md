@@ -81,6 +81,8 @@ $fsys = new Filesystem($adapter);
 $file = $fsys->read('default-image.jpg');
 ```
 
+and then set `extend_storage` in `config/imagekit.php` to `false`.
+
 ## Testing
 
 ```bash

@@ -11,9 +11,9 @@ return [
     |
     */
 
-    'public'       => env('IMAGEKIT_PUBLIC', ''),
-    'private'      => env('IMAGEKIT_PRIVATE', ''),
-    'endpoint'     => env('IMAGEKIT_ENDPOINT', ''),
+    'public' => env('IMAGEKIT_PUBLIC', ''),
+    'private' => env('IMAGEKIT_PRIVATE', ''),
+    'endpoint' => env('IMAGEKIT_ENDPOINT', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'purge_cache_update'    => true,
+    'purge_cache_update' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -37,7 +37,7 @@ return [
     |
     */
 
-    'include_folders'       => true,
+    'include_folders' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -49,5 +49,5 @@ return [
     |
     */
 
-    'extend_storage'        => true,
+    'extend_storage' => true,
 ];
