@@ -18,7 +18,7 @@ class ImagekitServiceProvider extends PackageServiceProvider
             ->hasConfigFile('imagekit');
     }
 
-    public function booting(Closure $callback)
+    public function bootingPackage()
     {
         if (! config('imagekit.extend_storage')) {
             return;
