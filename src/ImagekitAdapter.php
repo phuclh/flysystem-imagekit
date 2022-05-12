@@ -13,7 +13,6 @@ use League\Flysystem\UnableToWriteFile;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 
-
 class ImagekitAdapter implements FilesystemAdapter
 {
     protected MimeTypeDetector $mimeTypeDetector;
@@ -45,7 +44,7 @@ class ImagekitAdapter implements FilesystemAdapter
         $file = $this->client->listFiles([
             'name' => $filePath['fileName'],
             'path' => $filePath['directory'],
-            'includeFolder' => true
+            'includeFolder' => true,
         ]);
 
         return count($file->success ?? []) !== 0;
@@ -80,7 +79,7 @@ class ImagekitAdapter implements FilesystemAdapter
 
         $file = $this->client->listFiles([
             'name' => $filePath['fileName'],
-            'includeFolder' => true
+            'includeFolder' => true,
         ]);
 
         return $file->success[0];
@@ -107,7 +106,7 @@ class ImagekitAdapter implements FilesystemAdapter
     {
         $folder = $this->client->listFiles([
             'name' => $path,
-            'includeFolder' => true
+            'includeFolder' => true,
         ]);
 
         $this->client->deleteFile($folder->success[0]->folderId);
@@ -122,7 +121,7 @@ class ImagekitAdapter implements FilesystemAdapter
             'file' => 'xxx',
             'fileName' => 'empty',
             'useUniqueFileName' => false,
-            'folder' => $path
+            'folder' => $path,
         ]);
     }
 
@@ -182,11 +181,11 @@ class ImagekitAdapter implements FilesystemAdapter
     {
         $list = $this->client->listFiles([
             'name' => $path,
-            'includeFolder' => config('imagekit.include_folders')
+            'includeFolder' => config('imagekit.include_folders'),
         ]);
 
         // If not recursive remove files
-        if (!$deep) {
+        if (! $deep) {
             foreach ($list->success as $key => $e) {
                 $pathParts = isset($e->filePath)
                     ? explode('/', $e->filePath)
@@ -220,7 +219,6 @@ class ImagekitAdapter implements FilesystemAdapter
                 'path' => $filePath,
                 'dirname' => $dirName,
             ];
-
         }, (array)$list->success);
     }
 
@@ -281,7 +279,7 @@ class ImagekitAdapter implements FilesystemAdapter
 
         return [
             'fileName' => $fileName,
-            'directory' => $folder
+            'directory' => $folder,
         ];
     }
 
@@ -291,7 +289,7 @@ class ImagekitAdapter implements FilesystemAdapter
 
         $file = $this->client->listFiles([
             'name' => $filePath['fileName'],
-            'path' => $filePath['directory']
+            'path' => $filePath['directory'],
         ]);
 
         return $file->success[0];
@@ -299,7 +297,7 @@ class ImagekitAdapter implements FilesystemAdapter
 
     protected function upload(string $path, $contents): void
     {
-        if (!($file = $this->getFileFolderName($path))) {
+        if (! ($file = $this->getFileFolderName($path))) {
             return;
         }
 
@@ -307,7 +305,7 @@ class ImagekitAdapter implements FilesystemAdapter
             'file' => $contents,
             'fileName' => $file['fileName'],
             'useUniqueFileName' => false,
-            'folder' => $file['directory']
+            'folder' => $file['directory'],
         ]);
     }
 }
